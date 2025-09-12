@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projeto To-Do-List</title>
+  </head>
+  <body>
+    <h1>Projeto To-Do-List</h1>
+    <form action="/add" method="POST">
+      <input type="text" name="tarefa" placeholder="Nova tarefa" required />
+      <button type="submit">Adicionar</button>
+    </form>
+
+    <ul>
+      {% for tarefa in tarefas %}
+      <li>
+        {{ tarefa }}
+        <form action="/remove" method="POST" style="display: inline">
+          <input type="hidden" name="tarefa" value="{{ tarefa }}" />
+          <button type="submit">Remover</button>
+        </form>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
