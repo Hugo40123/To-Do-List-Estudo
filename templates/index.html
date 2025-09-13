@@ -16,17 +16,29 @@
       <input type="text" name="tarefa" placeholder="Nova tarefa" required />
       <button type="submit">Adicionar</button>
     </form>
-    <!--Lista de tarefas-->
+    <h2>Pendentes</h2>
     <ul>
-      {% for tarefa in tarefas %}
-      <li class="{% if tarefa.feito %}concluida{% endif %}">
+      {% for tarefa in tarefas if not tarefa.feito %}
+      <li class="pendente">
         {{ tarefa.texto }}
-
         <form action="/concluir" method="POST" style="display: inline">
           <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
           <button type="submit">✔️Concluir</button>
         </form>
 
+        <form action="/remove" method="POST" style="display: inline">
+          <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
+          <button type="submit">Remover</button>
+        </form>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <h2>Concluídas</h2>
+    <ul>
+      {% for tarefa in tarefas if tarefa.feito %}
+      <li class="concluida">
+        {{ tarefa.texto }}
         <form action="/remove" method="POST" style="display: inline">
           <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
           <button type="submit">Remover</button>
