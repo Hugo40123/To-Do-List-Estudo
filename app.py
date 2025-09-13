@@ -21,11 +21,22 @@ def add():
         tarefas.append({"texto":tarefa, "feito": False})
     return redirect(url_for("home"))
 
+@app.route("/concluir", methods=["POST"])
+def concluir():
+    tarefa_texto = request.form.get("tarefa")
+    for tarefa in tarefas:
+        if tarefa["texto"] == tarefa_texto:
+            tarefa["feito"] = True
+            break
+    return redirect(url_for("home"))
+
 @app.route("/remove", methods=["POST"])
 def remove():
-    tarefa = request.form.get("tarefa")
-    if tarefa in tarefas:
-        tarefas.remove(tarefa)
+    tarefa_texto = request.form.get("tarefa")
+    for tarefa in tarefas:
+        if tarefa["texto"] == tarefa_texto:
+            tarefas.remove(tarefa)
+            break
     return redirect(url_for("home"))
 
 if __name__ == "__main__":
