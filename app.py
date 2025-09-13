@@ -3,9 +3,9 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 tarefas = [
-    {"texto": "Comprar leite", "feito": False},
-    {"texto": "Estudar Python", "feito": False},
-    {"texto": "Limpar quarto", "feito": False}
+    {"texto": "Comprar leite", "feito": False, "prazo": None},
+    {"texto": "Estudar Python", "feito": False, "prazo": None},
+    {"texto": "Limpar quarto", "feito": False, "prazo": None}
 ]
 
 @app.route("/")
@@ -18,7 +18,7 @@ from flask import request, redirect, url_for
 def add():
     tarefa = request.form.get("tarefa")
     if tarefa:
-        tarefas.append({"texto":tarefa, "feito": False})
+        tarefas.append({"texto":tarefa, "feito": False, "prazo": prazo})
     return redirect(url_for("home"))
 
 @app.route("/concluir", methods=["POST"])
