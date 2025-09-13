@@ -4,21 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Projeto To-Do-List</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css')}}"
+    />
   </head>
   <body>
     <h1>Hoje</h1>
-    
+    <!--Formulario para adicionar tarefas-->
     <form action="/add" method="POST">
       <input type="text" name="tarefa" placeholder="Nova tarefa" required />
       <button type="submit">Adicionar</button>
     </form>
-
+    <!--Lista de tarefas-->
     <ul>
       {% for tarefa in tarefas %}
-      <li>
-        {{ tarefa }}
+      <li class="{% if tarefa.feito %}concluida{% endif %}">
+        {{ tarefa.texto }}
+
+        <form action="/concluir" method="POST" style="display: inline">
+          <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
+          <button type="submit">✔️Concluir</button>
+        </form>
+
         <form action="/remove" method="POST" style="display: inline">
-          <input type="hidden" name="tarefa" value="{{ tarefa }}" />
+          <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
           <button type="submit">Remover</button>
         </form>
       </li>
