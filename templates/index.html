@@ -10,52 +10,69 @@
     />
   </head>
   <body>
-    <!--Formulario para adicionar tarefas-->
-    <form action="/add" method="POST">
-      <input type="text" name="tarefa" placeholder="Nova tarefa" required />
-      <input type="datetime-local" name="dataHora" />
-      <select name="categoria">
-        <option value="Trabalho">Trabalho</option>
-        <option value="Estudo">Estudo</option>
-        <option value="Casa">Casa</option>
-        <option value="Outros">Outros</option>
-      </select>
-      <button type="submit">Adicionar</button>
-    </form>
-    <h2>Pendentes</h2>
-    <ul>
-      {% for tarefa in tarefas if not tarefa.feito %}
-      <li class="pendente">
-        {{ tarefa.texto }} {% if tarefa.prazo %} -
-        <small>Prazo:{{ tarefa.prazo }}</small>
-        {% endif %} - <em>{{ tarefa.categoria }}</em>
+    <div class="container">
+      <h1>TO DO LIST</h1>
 
-        <form action="/concluir" method="POST" style="display: inline">
-          <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
-          <button type="submit">✔️Concluir</button>
-        </form>
+      <h2>Pendentes</h2>
+      <ul>
+        {% for tarefa in tarefas if not tarefa.feito %}
+        <li class="pendente">
+          {{ tarefa.texto }} {% if tarefa.prazo %} -
+          <small>Prazo:{{ tarefa.prazo }}</small>
+          {% endif %} - <em>{{ tarefa.categoria }}</em>
 
-        <form action="/remove" method="POST" style="display: inline">
-          <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
-          <button type="submit">Remover</button>
-        </form>
-      </li>
-      {% endfor %}
-    </ul>
+          <form action="/concluir" method="POST" style="display: inline">
+            <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
+            <button type="submit">✔️Concluir</button>
+          </form>
 
-    <h2>Concluídas</h2>
-    <ul>
-      {% for tarefa in tarefas if tarefa.feito %}
-      <li class="concluida">
-        {{ tarefa.texto }} {% if tarefa.prazo %} -
-        <small>Prazo:{{ tarefa.prazo }}</small>
-        {% endif %} - <em>{{ tarefa.categoria }}</em>
-        <form action="/remove" method="POST" style="display: inline">
-          <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
-          <button type="submit">Remover</button>
+          <form action="/remove" method="POST" style="display: inline">
+            <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
+            <button type="submit">Remover</button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <h2>Concluídas</h2>
+      <ul>
+        {% for tarefa in tarefas if tarefa.feito %}
+        <li class="concluida">
+          {{ tarefa.texto }} {% if tarefa.prazo %} -
+          <small>Prazo:{{ tarefa.prazo }}</small>
+          {% endif %} - <em>{{ tarefa.categoria }}</em>
+          <form action="/remove" method="POST" style="display: inline">
+            <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
+            <button type="submit">Remover</button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <button class="fab" onclick="abrirModal()">+</button>
+
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <span class="close" onclick="fecharModal()">&times;</span>
+        <h2>Nova Tarefa</h2>
+        <form action="/add" method="POST">
+          <input
+            type="text"
+            name="tarefa"
+            placeholder="Descrição da Tarefa"
+            required
+          />
+          <input type="datetime-local" name="dataHora" />
+          <select name="categoria">
+            <option value="Trabalho">Trabalho</option>
+            <option value="Estudo">Estudo</option>
+            <option value="Casa">Casa</option>
+            <option value="Outros">Outros</option>
+          </select>
+          <button type="submit">Adicionar</button>
         </form>
-      </li>
-      {% endfor %}
-    </ul>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js')}}"></script>
   </body>
 </html>
