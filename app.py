@@ -7,10 +7,16 @@ tarefas = [
     {"texto": "Estudar Python", "feito": False, "prazo": None},
     {"texto": "Limpar quarto", "feito": False, "prazo": None}
 ]
+categorias = ["Trabalho", "Estudo", "Casa", "Pessoal", "Outros"]
 
 @app.route("/")
-def home():
-    return render_template("index.html", tarefas=tarefas)
+@app.route("/<filtro>")
+def home(filtro="Todos"):
+    if filtro == "Todos":
+        tarefas_filtradas = tarefas
+    else:
+        tarefas_filtradas = [t for t in tarefas if t["categoria"] == filtro]
+    return render_template("index.html", tarefas=tarefas_filtradas, categorias=categorias, filtro=filtro)
 
 from flask import request, redirect, url_for
 from datetime import datetime
@@ -20,8 +26,6 @@ def add():
     tarefa = request.form.get("tarefa")
     prazo_str = request.form.get("dataHora")
     prazo_formatado = None
-    categoria = request.form.get("categoria")
-
     if prazo_str:
         prazo = datetime.fromisoformat(prazo_str)
         prazo_formatado = prazo.strftime("%d/%m/%Y %H:%M")

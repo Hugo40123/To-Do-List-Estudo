@@ -10,47 +10,40 @@
     />
   </head>
   <body>
-    <div class="container">
-      <h1>TO DO LIST</h1>
-
-      <h2>Pendentes</h2>
-      <ul>
-        {% for tarefa in tarefas if not tarefa.feito %}
-        <li class="pendente">
-          {{ tarefa.texto }} {% if tarefa.prazo %} -
-          <small>Prazo:{{ tarefa.prazo }}</small>
-          {% endif %} - <em>{{ tarefa.categoria }}</em>
-
-          <form action="/concluir" method="POST" style="display: inline">
-            <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
-            <button type="submit">✔️Concluir</button>
-          </form>
-
-          <form action="/remove" method="POST" style="display: inline">
-            <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
-            <button type="submit">Remover</button>
-          </form>
-        </li>
-        {% endfor %}
-      </ul>
-
-      <h2>Concluídas</h2>
-      <ul>
-        {% for tarefa in tarefas if tarefa.feito %}
-        <li class="concluida">
-          {{ tarefa.texto }} {% if tarefa.prazo %} -
-          <small>Prazo:{{ tarefa.prazo }}</small>
-          {% endif %} - <em>{{ tarefa.categoria }}</em>
-          <form action="/remove" method="POST" style="display: inline">
-            <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
-            <button type="submit">Remover</button>
-          </form>
-        </li>
-        {% endfor %}
-      </ul>
+    <div class="top-bar">
+      {% for cat in ["Todos"] + categorias %}
+      <a href="{{ url_for('home', filtro=cat) }}">
+        <button class="{{ 'active' if filtro == cat else '' }}">
+          {{ cat }}
+        </button>
+      </a>
+      {% endfor %}
     </div>
-    <button class="fab" onclick="abrirModal()">+</button>
 
+    <ul>
+      {% for tarefa in tarefas %}
+      <li class="{{'feito' if tarefa.texto }}">
+        <div class="info">
+          <strong>{{ tarefa.texto }}</strong>
+          {% if tarefa.categoria %}<span class="categoria"
+            >{{ tarefa.categoria}}</span
+          >{% endif %} {% if tarefa.prazo %}<span class="prazo"
+            >{{ tarefa.prazo}}</span
+          >{% endif %}
+        </div>
+        <form action="/concluir" method="POST" style="display: inline">
+          <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
+          <button type="submit">✅</button>
+        </form>
+        <form action="/remove" method="POST" style="display: inline">
+          <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
+          <button type="submit">🗑️</button>
+        </form>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <button class="fab" onclick="abrirModal()">+</button>
     <div class="modal" id="modal">
       <div class="modal-content">
         <span class="close" onclick="fecharModal()">&times;</span>
