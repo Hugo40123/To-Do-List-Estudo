@@ -6,10 +6,11 @@
     <title>Projeto To-Do-List</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='style.css')}}"
+      href="{{ url_for('static', filename='style.css') }}"
     />
   </head>
   <body>
+    <!-- Top Bar -->
     <div class="top-bar">
       {% for cat in ["Todos"] + categorias %}
       <a href="{{ url_for('home', filtro=cat) }}">
@@ -20,6 +21,7 @@
       {% endfor %}
     </div>
 
+    <!-- Lista de Tarefas -->
     <div class="task-list">
       {% for tarefa in tarefas %}
       <div class="task-card {% if tarefa.feito %}feito{% endif %}">
@@ -46,29 +48,79 @@
       {% endfor %}
     </div>
 
+    <!-- Botão flutuante -->
     <button class="fab" onclick="abrirModal()">+</button>
+
+    <!-- Modal -->
     <div class="modal" id="modal">
       <div class="modal-content">
         <span class="close" onclick="fecharModal()">&times;</span>
-        <h2>Nova Tarefa</h2>
         <form action="/add" method="POST">
+          <!-- Descrição -->
           <input
             type="text"
             name="tarefa"
             placeholder="Descrição da Tarefa"
             required
+            class="input-descricao"
           />
-          <input type="datetime-local" name="dataHora" />
-          <select name="categoria">
-            <option value="Trabalho">Trabalho</option>
-            <option value="Estudo">Estudo</option>
-            <option value="Casa">Casa</option>
-            <option value="Outros">Outros</option>
-          </select>
-          <button type="submit">Adicionar</button>
+
+          <!-- Categoria -->
+          <button
+            type="button"
+            class="btn-categoria"
+            onclick="abrirCategoria()"
+          >
+            📂 Selecionar Categoria
+          </button>
+          <div class="categoria-popup" id="categoria-popup">
+            {% for cat in categorias %}
+            <div
+              class="categoria-item"
+              onclick="selecionarCategoria('{{ cat }}')"
+            >
+              {{ cat }}
+            </div>
+            {% endfor %}
+          </div>
+          <input type="hidden" name="categoria" id="categoria-input" />
+
+          <!-- Data -->
+          <button type="button" class="btn-data" onclick="abrirCalendario()">
+            📅 Selecionar Data
+          </button>
+          <div class="calendario-popup" id="calendario-popup">
+            <div class="calendario-header">
+              <button type="button" onclick="prevMes()">&#8249;</button>
+              <span id="mes-ano"></span>
+              <button type="button" onclick="nextMes()">&#8250;</button>
+            </div>
+            <div class="dias-semana">
+              <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span
+              ><span>Qui</span><span>Sex</span><span>Sáb</span>
+            </div>
+            <div class="dias" id="dias"></div>
+          </div>
+
+          <input
+            type="date"
+            name="data"
+            id="data-input"
+            style="display: none"
+          />
+          <input
+            type="time"
+            name="hora"
+            id="hora-input"
+            placeholder="Hora (opcional)"
+          />
+
+          <!-- Adicionar -->
+          <button type="submit" class="btn-adicionar">Adicionar</button>
         </form>
       </div>
     </div>
-    <script src="{{ url_for('static', filename='script.js')}}"></script>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
   </body>
 </html>

@@ -1,3 +1,6 @@
+/* =========================
+   Reset e estilo base
+========================= */
 body {
   font-family: "Inter", sans-serif;
   background-color: #f5f5f5;
@@ -5,22 +8,33 @@ body {
   padding: 0;
 }
 
+/* =========================
+   Top Bar
+========================= */
 .top-bar {
   display: flex;
   gap: 10px;
   padding: 10px;
   background: #f8f9fa;
   border-bottom: 1px solid #ddd;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.top-bar::-webkit-scrollbar {
+  display: none;
 }
 
 .top-bar button {
-  flex: 1;
-  padding: 8px;
+  flex: 0 0 auto;
+  padding: 5px 12px;
   border: none;
-  border-radius: 6px;
+  border-radius: 20px;
   background: #e0e0e0;
   cursor: pointer;
   font-size: 14px;
+  white-space: nowrap;
 }
 
 .top-bar button.active {
@@ -29,6 +43,9 @@ body {
   font-weight: bold;
 }
 
+/* =========================
+   Lista de Tarefas
+========================= */
 .task-list {
   display: flex;
   flex-direction: column;
@@ -46,8 +63,17 @@ body {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s;
 }
+
 .task-card:hover {
   transform: translateY(-2px);
+}
+
+.task-card.feito {
+  opacity: 0.6;
+}
+
+.task-card.feito h3 {
+  text-decoration: line-through;
 }
 
 .task-info h3 {
@@ -72,7 +98,7 @@ body {
   color: #555;
 }
 
-.task.actions {
+.task-actions {
   display: flex;
   gap: 8px;
 }
@@ -107,14 +133,9 @@ body {
   background: #d32f2f;
 }
 
-.task-card.feito {
-  opacity: 0.6;
-}
-
-.task-card.feito h3 {
-  text-decoration: line-through;
-}
-
+/* =========================
+   Botão Flutuante (+)
+========================= */
 .fab {
   position: fixed;
   bottom: 25px;
@@ -140,64 +161,152 @@ body {
   transform: translate(-2px);
 }
 
+/* =========================
+   Modal
+========================= */
 .modal {
   display: none;
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background: rgba(0, 0, 0, 0.05);
   justify-content: center;
   align-items: flex-end;
   z-index: 999;
 }
 
 .modal-content {
-  background-color: #fff;
-  width: 100%;
-  max-width: 500px;
-  border-radius: 10px 10px 0 0;
+  background: #fff;
+  border-radius: 12px 12px 0 0;
   padding: 20px;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.02);
+  width: 90%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
-/* Estilo para telas pequenas (celulares) */
+.modal-content .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.input-descricao {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  align-items: center;
+}
+.modal-content input[type="text"] {
+  display: block;
+  width: 90%;
+  margin: 10px auto; /* centraliza horizontalmente */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+.btn-data {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #f0f0f0;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+}
+
+#hora-input {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 100%;
+  margin-top: 5px;
+}
+
+/* =========================
+   Popups de Categoria e Calendário
+========================= */
+.categoria-popup {
+  display: none;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  max-height: 120px;
+  overflow-y: auto;
+  margin-top: 5px;
+}
+
+.categoria-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.categoria-item:hover {
+  background: #e0e0e0;
+}
+
+.calendario-popup {
+  display: none;
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  top: 60px;
+  width: 280px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+}
+
+.calendario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.calendario-header button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.dias-semana,
+.dias {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+.dias span {
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.dias span:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+/* =========================
+   Responsividade
+========================= */
 @media (max-width: 480px) {
-  .top-bar {
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-    background: #f8f9fa;
-    border-bottom: 1px solid #ddd;
-    overflow-x: auto; /* ativa o scroll horizontal */
-    -webkit-overflow-scrolling: touch; /* suaviza o scroll no iOS */
-    scrollbar-width: none; /* Firefox: esconde a barra */
-  }
-
-  .top-bar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari e Edge: esconde a barra de rolagem */
-  }
-
-  .top-bar button {
-    flex: 0 0 auto; /* impede que o botão encolha */
-    padding: 5px 12px;
-    border: none;
-    border-radius: 20px;
-    background: #e0e0e0;
-    cursor: pointer;
-    font-size: 14px;
-    white-space: nowrap; /* evita que o texto quebre */
-  }
-
-  .task-list {
-    padding: 10px;
-    gap: 10px;
-  }
-
   .task-card {
     flex-direction: column;
     align-items: flex-start;
-    padding: 12px;
   }
 
   .task-actions {
@@ -223,14 +332,14 @@ body {
 
   .modal-content {
     width: 100%;
-    border-radius: 10px 10px 0 0;
     padding: 15px;
+    border-radius: 10px 10px 0 0;
   }
 
-  .add-task input,
-  .add-task select,
-  .add-task button {
+  .top-bar button {
+    flex: 0 0 auto;
+    padding: 5px 12px;
+    border-radius: 20px;
     font-size: 14px;
-    padding: 6px;
   }
 }
