@@ -3,9 +3,9 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 tarefas = [
-    {"texto": "Comprar leite", "feito": False, "prazo": None},
-    {"texto": "Estudar Python", "feito": False, "prazo": None},
-    {"texto": "Limpar quarto", "feito": False, "prazo": None}
+    {"texto": "Comprar leite", "feito": False, "prazo": None, "categoria": "Casa"},
+    {"texto": "Estudar Python", "feito": False, "prazo": None, "categoria": "Estudo"},
+    {"texto": "Limpar quarto", "feito": False, "prazo": None, "categoria": "Pessoal"}
 ]
 categorias = ["Trabalho", "Estudo", "Casa", "Pessoal", "Outros"]
 
@@ -25,12 +25,15 @@ from datetime import datetime
 def add():
     tarefa = request.form.get("tarefa")
     prazo_str = request.form.get("dataHora")
+    categoria = request.form.get("categoria")
     prazo_formatado = None
+
     if prazo_str:
         prazo = datetime.fromisoformat(prazo_str)
         prazo_formatado = prazo.strftime("%d/%m/%Y %H:%M")
     if tarefa:
         tarefas.append({"texto":tarefa, "feito": False, "prazo": prazo_formatado, "categoria": categoria})
+        
     return redirect(url_for("home"))
 
 @app.route("/concluir", methods=["POST"])

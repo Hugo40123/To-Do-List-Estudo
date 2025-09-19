@@ -20,28 +20,31 @@
       {% endfor %}
     </div>
 
-    <ul>
+    <div class="task-list">
       {% for tarefa in tarefas %}
-      <li class="{{'feito' if tarefa.texto }}">
-        <div class="info">
-          <strong>{{ tarefa.texto }}</strong>
-          {% if tarefa.categoria %}<span class="categoria"
-            >{{ tarefa.categoria}}</span
-          >{% endif %} {% if tarefa.prazo %}<span class="prazo"
-            >{{ tarefa.prazo}}</span
-          >{% endif %}
+      <div class="task-card {% if tarefa.feito %}feito{% endif %}">
+        <div class="task-info">
+          <h3>{{ tarefa.texto }}</h3>
+          {% if tarefa.prazo %}
+          <p class="prazo">Prazo: {{ tarefa.prazo }}</p>
+          {% endif %} {% if tarefa.categoria %}
+          <span class="categoria">{{ tarefa.categoria }}</span>
+          {% endif %}
         </div>
-        <form action="/concluir" method="POST" style="display: inline">
-          <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
-          <button type="submit">✅</button>
-        </form>
-        <form action="/remove" method="POST" style="display: inline">
-          <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
-          <button type="submit">🗑️</button>
-        </form>
-      </li>
+
+        <div class="task-actions">
+          <form action="/concluir" method="POST" style="display: inline">
+            <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
+            <button type="submit" class="btn-concluir">✓</button>
+          </form>
+          <form action="/remove" method="POST" style="display: inline">
+            <input type="hidden" name="tarefa" value="{{ tarefa.texto }}" />
+            <button type="submit" class="btn-deletar">🗑️</button>
+          </form>
+        </div>
+      </div>
       {% endfor %}
-    </ul>
+    </div>
 
     <button class="fab" onclick="abrirModal()">+</button>
     <div class="modal" id="modal">
